@@ -1,15 +1,13 @@
 import TouchPortalAPI from "touchportal-api";
-import { WaveLinkClient } from "./bundle.js";
+import { WaveLinkClient } from "./lib.js";
 
 const wlc = new WaveLinkClient("windows");
 
 wlc.setAppIsRunning(true);
 wlc.tryToConnect();
 
-// Create an instance of the Touch Portal Client
 const TPClient = new TouchPortalAPI.Client();
 
-// Define a pluginId, matches your entry.tp file
 const pluginId = "TPElgatoWaveLink";
 
 wlc.on("UpdateKeys", () => {
@@ -40,7 +38,7 @@ wlc.on("inputMixerChanged", (mixerId) => {
   if (bgColor.length != 9) {
     bgColor = bgColor.replace("#", "#FF");
   }
-  console.log(bgColor);
+
   TPClient.stateUpdateMany([
     {
       id: `wavelink_channel_${mixer.channelPos}_bgColor`,
@@ -116,7 +114,6 @@ const getMixerByName = (name) => {
   return wlc.mixers.find((mixer) => mixer.name == name);
 };
 
-// Receive an Action Call from Touch Portal
 TPClient.on("Action", (data) => {
   console.log(data);
 
@@ -152,9 +149,8 @@ TPClient.on("Action", (data) => {
       var { wavelink_output: output, wavelink_volume: level } = actionData;
       wlc.adjustVolume("input", mixerId, output, parseInt(level));
       break;
-    // com.elgato.wavelink.adjustvolumemixer
-    //  adjustVolume(mixerTyp, mixerId, inSlider, vol) {
     default:
+      console.log("unhandled action", data.actionId);
       break;
   }
 });
@@ -163,11 +159,8 @@ TPClient.on("ListChange", (data) => {
   console.log(pluginId, ": DEBUG : ListChange :" + JSON.stringify(data));
 });
 
-// After join to Touch Portal, it sends an info message
-// handle it here
 TPClient.on("Info", (data) => {
   console.log(pluginId, ": DEBUG : Info :" + JSON.stringify(data));
 });
 
-//Connects and Pairs to Touch Portal via Sockete
 TPClient.connect({ pluginId });

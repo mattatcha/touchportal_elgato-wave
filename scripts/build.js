@@ -30,8 +30,26 @@ concat({
     "lib/wavelink/WaveLinkClient.js",
     "lib/wavelink/index.js",
   ],
-  dest: "src/bundle.js",
+  dest: "src/lib.js",
 });
+
+import { exec } from "child_process";
+exec("npm run babel", (error, stdout, stderr) => {
+  console.log(stdout);
+  console.log(stderr);
+  if (error !== null) {
+    console.log(`exec error: ${error}`);
+  }
+});
+
+import { exec as pkg } from "pkg";
+await pkg([
+  "--target",
+  "node14-win-x64",
+  "--output",
+  "base/Win/TPElgatoWaveLink/tpelgatowavelink.exe",
+  "dist/index.js",
+]);
 
 const zip = new AdmZip();
 zip.addLocalFolder(

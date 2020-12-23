@@ -1,32 +1,25 @@
 {
   "name": "tpelgatowavelink",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Touch Portal Plugin for Elgato Wave Link",
-  "bin": "src/index.js",
-  "main": "src/index.js",
+  "bin": "dist/index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "build": "npm run pkg:win && npm run gen:entry && node scripts/build.js",
-    "concat": "concat-cli -f lib/wavelink/ELGEvents.js -f lib/wavelink/WaveLinkAction.js -f lib/wavelink/SetMonitorMixOutput.js -f lib/wavelink/ToggleMonitorMixOutput.js -f lib/wavelink/SwitchMonitoring.js -f lib/wavelink/SwitchProfile.js -f lib/wavelink/AdjustVolumeMixer.js -f lib/wavelink/SetVolumeMixer.js -f lib/wavelink/AdjustVolumeMonitor.js -f lib/wavelink/SetVolumeMonitor.js -f lib/wavelink/MixerMute.js -f lib/wavelink/MonitorMute.js -f lib/wavelink/SetMicrophoneSettings.js -f lib/wavelink/WaveLinkClient.js -f lib/wavelink/index.js -o src/bundle.js",
-    "pkg:win": "pkg --targets node14-win-x64 -o base/Win/TPElgatoWaveLink/tpelgatowavelink.exe .",
-    "pkg:mac": "pkg --targets node14-macos-x64 -o base/Mac/TPElgatoWaveLink/tpelgatowavelink .",
+    "babel": "babel src -d dist",
+    "build": "npm run gen:entry && node scripts/build.js",
     "gen:entry": "node scripts/genEntry.js > base/Win/TPElgatoWaveLink/entry.tp"
   },
   "author": "Matt Aitchison",
   "license": "ISC",
-  "pkg": {
-    "options": [
-      "experimental-modules"
-    ],
-    "assets": [
-      "src/**/*"
-    ]
-  },
   "devDependencies": {
-    "pkg": "4.4.9",
-    "concat-cli": "4.0.0",
-    "adm-zip": "0.5.1"
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "adm-zip": "0.5.1",
+    "pkg": "4.4.9"
   },
   "dependencies": {
     "websocket": "1.0.33",
@@ -34,7 +27,6 @@
     "cross-blob": "2.0.0",
     "tiny-worker": "2.3.0",
     "body-parser": "^1.19.0",
-    "express": "^4.17.1",
     "out-url": "^1.1.1",
     "touchportal-api": "^1.0.6"
   }
